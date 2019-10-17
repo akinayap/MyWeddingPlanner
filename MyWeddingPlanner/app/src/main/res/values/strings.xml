@@ -1,0 +1,9 @@
+<resources>
+	<string name="app_name">My Wedding Planner</string>
+	<string name="title_overview">Overview</string>
+	<string name="title_budget">Budget</string>
+	<string name="title_guestlist">Guestlist</string>
+	<string name="title_honeymoon">Honeymoon</string>
+	<string name="title_packages">Packages</string>
+	<string name="title_activity_maps">Map</string>
+</resources>

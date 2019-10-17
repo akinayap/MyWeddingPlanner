@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "644013017696",
+    "firebase_url": "https://a-and-w.firebaseio.com",
+    "project_id": "a-and-w",
+    "storage_bucket": "a-and-w.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644013017696:android:4c9089bd99cf34c9ab5105",
+        "android_client_info": {
+          "package_name": "a.w.aw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644013017696-5tf73e8leh64olig3063dibgkp1704ee.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "a.w.aw",
+            "certificate_hash": "e17231c6874c5b56c4fd9b38bfaf449d25e42809"
+          }
+        },
+        {
+          "client_id": "644013017696-34mqcqb19pjgd9pbqfro29rsj8u2o4oa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuVn1OkFZ4ltW75HRL8CVsaEwAyUsY948"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644013017696-34mqcqb19pjgd9pbqfro29rsj8u2o4oa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644013017696:android:8406ced93e5f414fab5105",
+        "android_client_info": {
+          "package_name": "a.w.myweddingplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644013017696-97i4763n60spe1g7pib19tq983ovoo25.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "a.w.myweddingplanner",
+            "certificate_hash": "e17231c6874c5b56c4fd9b38bfaf449d25e42809"
+          }
+        },
+        {
+          "client_id": "644013017696-34mqcqb19pjgd9pbqfro29rsj8u2o4oa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuVn1OkFZ4ltW75HRL8CVsaEwAyUsY948"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644013017696-34mqcqb19pjgd9pbqfro29rsj8u2o4oa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

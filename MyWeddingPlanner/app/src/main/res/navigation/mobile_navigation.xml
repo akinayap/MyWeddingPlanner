@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/mobile_navigation"
+	app:startDestination="@+id/nav_overview">
+
+	<fragment
+		android:id="@+id/nav_overview"
+		android:name="a.w.myweddingplanner.tabs.OverviewFrag"
+		android:label="@string/title_overview"
+		tools:layout="@layout/frag_overview" />
+
+	<fragment
+		android:id="@+id/nav_packages"
+		android:name="a.w.myweddingplanner.tabs.Packages.PackagesFrag"
+		android:label="@string/title_packages"
+		tools:layout="@layout/frag_packages" />
+
+
+	<fragment
+		android:id="@+id/nav_budget"
+		android:name="a.w.myweddingplanner.tabs.Budget.BudgetFrag"
+		android:label="@string/title_budget"
+		tools:layout="@layout/frag_budget" />
+
+	<fragment
+		android:id="@+id/nav_guestlist"
+		android:name="a.w.myweddingplanner.tabs.GuestlistFrag"
+		android:label="@string/title_guestlist"
+		tools:layout="@layout/frag_guestlist" />
+
+	<fragment
+		android:id="@+id/nav_honeymoon"
+		android:name="a.w.myweddingplanner.tabs.Honeymoon.HoneymoonFrag"
+		android:label="@string/title_honeymoon"
+		tools:layout="@layout/frag_honeymoon" />
+
+</navigation>

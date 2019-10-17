@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/add_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="Package Item"
+		android:textSize="18sp"
+		android:textStyle="normal|bold"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<ImageButton
+		android:id="@+id/delete_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/delete"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
+	<TextView
+		android:id="@+id/tv_shop_name"
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:text="Shop Name"
+		android:textAlignment="center"
+		app:layout_constraintBottom_toBottomOf="@id/et_shop_name"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@id/et_shop_name" />
+
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/et_shop_name"
+		android:layout_width="200dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="8dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/tv_shop_name"
+		app:layout_constraintTop_toBottomOf="@id/add_title" />
+
+	<ScrollView
+		android:id="@+id/scrollView"
+		android:layout_width="match_parent"
+		android:layout_height="400dp"
+		app:layout_constraintBottom_toTopOf="@id/add_field_btn"
+		app:layout_constraintTop_toBottomOf="@+id/et_shop_name">
+
+		<LinearLayout
+			android:id="@+id/all_items"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:orientation="vertical"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/et_shop_name" />
+	</ScrollView>
+	<Button
+		android:id="@+id/cancel_btn"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginBottom="8dp"
+		android:background="@drawable/bg_btn"
+		android:text="@android:string/cancel"
+		android:textColor="@color/blueAccent1"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/add_field_btn"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/scrollView" />
+
+	<Button
+		android:id="@+id/add_field_btn"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginBottom="8dp"
+		android:background="@drawable/bg_btn"
+		android:text="Add Field"
+		android:textColor="@color/blueAccent1"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/ok_btn"
+		app:layout_constraintStart_toEndOf="@id/cancel_btn"
+		app:layout_constraintTop_toBottomOf="@+id/scrollView" />
+
+	<Button
+		android:id="@+id/ok_btn"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_margin="8dp"
+		android:background="@drawable/bg_btn"
+		android:text="Ok"
+		android:textColor="@color/blueAccent1"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/add_field_btn"
+		app:layout_constraintTop_toBottomOf="@+id/scrollView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

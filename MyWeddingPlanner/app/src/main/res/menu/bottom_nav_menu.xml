@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/nav_overview"
+		android:icon="@drawable/ic_overview"
+		android:title="@string/title_overview" />
+
+	<item
+		android:id="@+id/nav_packages"
+		android:icon="@drawable/ic_packages"
+		android:title="@string/title_packages"/>
+
+	<item
+		android:id="@+id/nav_budget"
+		android:icon="@drawable/ic_budget"
+		android:title="@string/title_budget" />
+
+	<item
+		android:id="@+id/nav_guestlist"
+		android:icon="@drawable/ic_guestlist"
+		android:title="@string/title_guestlist" />
+
+	<item
+		android:id="@+id/nav_honeymoon"
+		android:icon="@drawable/ic_honeymoon"
+		android:title="@string/title_honeymoon" />
+
+</menu>
