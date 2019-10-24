@@ -34,7 +34,7 @@ import a.w.myweddingplanner.R;
 public class BudgetFrag extends Fragment {
 	private FirebaseFirestore db = FirebaseFirestore.getInstance();
 	private List<Category> categories = new ArrayList<>();
-	public static List<String> cat_names = Arrays.asList("Decorations", "Invitations", "Venue");
+	public static List<String> cat_names = Arrays.asList("Decorations", "Invitations", "Venue", "Miscellaneous");
 	private BudgetAdapter adapter;
 
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

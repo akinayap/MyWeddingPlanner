@@ -14,4 +14,10 @@ class Place {
 
 		isOpen = false;
 	}
+
+	public void modify(String t, String i, String l) {
+		title = t;
+		image = i;
+		link = l;
+	}
 }

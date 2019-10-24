@@ -35,9 +35,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
@@ -49,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 
 import a.w.myweddingplanner.R;
+
+import static android.content.ContentValues.TAG;
 
 public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 	private GoogleMap mMap;
@@ -121,7 +128,7 @@ public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 					tvAddress.setVisibility(View.GONE);
 				}
 
-				if(addressList.get(i).getCountryName().equals("")){
+				if(addressList.get(i).getCountryName() != null && addressList.get(i).getCountryName().equals("")){
 					tvCountry.setVisibility(View.GONE);
 				}
 
@@ -152,20 +159,62 @@ public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 						addDialog.dismiss();
 					});
 					okBtn.setOnClickListener(ov->{
+						String[] separated = l.getText().toString().split(",");
+						Place p = new Place(etLocation.getText().toString(), etImage.getText().toString(), etLink.getText().toString(), Double.parseDouble(separated[0]), Double.parseDouble(separated[1].substring(1)));
+
 						// DO THIS
-
-						for(int k = 0; k < locList.size(); ++k){
-							if(c.getText().toString().equals(locList.get(k).title)){
-								Place p = new Place(a, i, l, Double.parseDouble(separated[0]), Double.parseDouble(separated[1].substring(1)));
+						int k;
+						for(k = 0; k < locList.size(); ++k){
+							if(etCountry.getText().toString().equals(locList.get(k).title)){
 								locList.get(k).places.add(p);
+								final int id = k;
 
+								db.collection("Locations")
+												.whereEqualTo("Title", etCountry.getText().toString())
+												.get()
+												.addOnCompleteListener(task -> {
+													if (task.isSuccessful()) {
+														for (QueryDocumentSnapshot document : task.getResult()) {
+															Map<String, Object> newPlacesOfInterests = new HashMap<>();
+
+															for(Place place : locList.get(id).places){
+																Map<String, Object> newPlaceDetails = new HashMap<>();
+																newPlaceDetails.put("Image", place.image);
+																newPlaceDetails.put("Link", place.link);
+																GeoPoint newLatLng = new GeoPoint(place.latitude, place.longitude);
+																newPlaceDetails.put("Location", newLatLng);
+																newPlacesOfInterests.put(place.title, newPlaceDetails);
+															}
+															db.collection("Locations").document(document.getId()).update("Places Of Interests", newPlacesOfInterests);
+														}
+													} else {
+														Log.w(TAG, "Error getting documents.", task.getException());
+													}
+												});
+								break;
 							}
 						}
 						if(k == locList.size()){
-							// Add to firebase and loclist
+							Map<String, Object> newPkg = new HashMap<>();
+							newPkg.put("Cost", 2000);
+							newPkg.put("Title", etCountry.getText().toString());
+							newPkg.put("Selected", false);
+
+							Map<String, Object> newPlace = new HashMap<>();
+							Map<String, Object> newPlaceDetails = new HashMap<>();
+							newPlaceDetails.put("Image", etImage.getText().toString());
+							newPlaceDetails.put("Link", etLink.getText().toString());
+							GeoPoint newLatLng = new GeoPoint(Double.parseDouble(separated[0]), Double.parseDouble(separated[1].substring(1)));
+							newPlaceDetails.put("Location", newLatLng);
+							newPlace.put(etLocation.getText().toString(), newPlaceDetails);
+							newPkg.put("Places Of Interests", newPlace);
+
+							db.collection("Locations")
+											.add(newPkg)
+											.addOnSuccessListener(documentReference -> Log.e("Success", documentReference.getId()))
+											.addOnFailureListener(e -> Log.e("Exception", e.toString()));
 						}
 						// Add to firebase
-						String[] separated = l.getText().toString().split(",");
 						LatLng latLng = new LatLng(Double.parseDouble(separated[0]), Double.parseDouble(separated[1].substring(1)));
 						mMap.addMarker(new MarkerOptions().position(latLng).title(location));
 						mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -195,7 +244,9 @@ public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		mMap = googleMap;
-		// Add a marker in Sydney and move the camera
+
+		ConstraintLayout selectedLocation = mapView.findViewById(R.id.selected_location);
+		mMap.setOnMapClickListener(v->selectedLocation.setVisibility(View.GONE));
 
 		db.collection("Locations").orderBy("Title").addSnapshotListener((snapshots, e) -> {
 			if (e != null) {
@@ -203,10 +254,38 @@ public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 				return;
 			}
 			for (DocumentChange dc : snapshots.getDocumentChanges()) {
-				Location loc = null;
 				switch (dc.getType()) {
 					case MODIFIED:
 						for(int i = 0; i < locList.size(); ++i){
+							if(dc.getDocument().get("Title").toString().equals(locList.get(i).title)){
+								locList.get(i).places.clear();
+								Map<String, Map<String, Object>> placesOfInterests = (Map<String, Map<String, Object>>) dc.getDocument().get("Places Of Interests");
+								Object[] poi = placesOfInterests.keySet().toArray();
+								for (Object value : poi) {
+									String image = placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[0].toString()).toString();
+									String link = placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[1].toString()).toString();
+									GeoPoint plc = (GeoPoint) placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[2].toString());
+
+									Place p = new Place(value.toString(), image, link, plc.getLatitude(), plc.getLongitude());
+									locList.get(i).places.add(p);
+									LatLng latLng = new LatLng(p.latitude, p.longitude);
+									mMap.addMarker(new MarkerOptions().position(latLng).title(p.title).snippet(p.image));
+									mMap.setOnMarkerClickListener(marker -> {
+										selectedLocation.setVisibility(View.VISIBLE);
+										TextView name = mapView.findViewById(R.id.loc_name);
+										ImageView img = mapView.findViewById(R.id.loc_img);
+
+										name.setText(marker.getTitle());
+										new DownloadImageTask(img).execute(marker.getSnippet());
+										return false;
+									});
+								}
+								adapter.notifyDataSetChanged();
+								break;
+							}
+						}
+
+/*						for(int i = 0; i < locList.size(); ++i){
 							if(locList.get(i).id.equals(dc.getDocument().getId())){
 								loc = locList.get(i);
 								break;
@@ -225,24 +304,24 @@ public class HoneymoonFrag  extends Fragment implements OnMapReadyCallback {
 								//String location = placesOfInterests.get(poi[0]).keySet().toArray()[2].toString();
 								loc.places.add(new Place(poi[i].toString(), image, link, 0.0, 0.0));
 							}
-							adapter.notifyDataSetChanged();
-						}
+						}*/
 						break;
 					case ADDED:
 						String title = dc.getDocument().get("Title").toString();
-						loc = new Location(dc.getDocument().getId(), title, (boolean) dc.getDocument().get("Selected"), Integer.parseInt(dc.getDocument().get("Cost").toString()));
+						Location loc = new Location(dc.getDocument().getId(), title, (boolean) dc.getDocument().get("Selected"), Integer.parseInt(dc.getDocument().get("Cost").toString()));
 						Map<String, Map<String, Object>> placesOfInterests = (Map<String, Map<String, Object>>) dc.getDocument().get("Places Of Interests");
 						Object[] poi = placesOfInterests.keySet().toArray();
-						for(int i = 0 ; i < poi.length; ++i){
-							String image = placesOfInterests.get(poi[i]).get(placesOfInterests.get(poi[i]).keySet().toArray()[0].toString()).toString();
-							String link = placesOfInterests.get(poi[i]).get(placesOfInterests.get(poi[i]).keySet().toArray()[1].toString()).toString();
-							GeoPoint plc = (GeoPoint) placesOfInterests.get(poi[i]).get(placesOfInterests.get(poi[i]).keySet().toArray()[2].toString());
+						for (Object value : poi) {
+							String image = placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[0].toString()).toString();
+							String link = placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[1].toString()).toString();
+							GeoPoint plc = (GeoPoint) placesOfInterests.get(value).get(placesOfInterests.get(value).keySet().toArray()[2].toString());
 
-							Place p = new Place(poi[i].toString(), image, link, plc.getLatitude(), plc.getLongitude());
+							Place p = new Place(value.toString(), image, link, plc.getLatitude(), plc.getLongitude());
 							loc.places.add(p);
 							LatLng latLng = new LatLng(p.latitude, p.longitude);
 							mMap.addMarker(new MarkerOptions().position(latLng).title(p.title).snippet(p.image));
 							mMap.setOnMarkerClickListener(marker -> {
+								selectedLocation.setVisibility(View.VISIBLE);
 								TextView name = mapView.findViewById(R.id.loc_name);
 								ImageView img = mapView.findViewById(R.id.loc_img);
 
